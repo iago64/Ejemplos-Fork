@@ -26,8 +26,7 @@ void chld_destroy(t_hijo* self){
 
 void chldKilled(int signum){
 	int status;
-	if(cant_hijos >= 0){
-		printf("Vamos a matar al %d hijo\nSoy el padre: %d\n",bajas,getpid());
+	if(cant_hijos > 0){
 		t_hijo* hijo_a_matar;
 		hijo_a_matar=list_get(hijos,0);
 		printf("Chau %d\n",hijo_a_matar->pid);
@@ -38,7 +37,7 @@ void chldKilled(int signum){
 		printf("Ahora tengo %d hijos\n",cant_hijos);
 		list_remove_and_destroy_element(hijos,0,(void*)chld_destroy);
 	}else{
-		printf("No tengo mas hijos para matar");
+		printf("No tengo mas hijos para matar\n");
 	}
 
 }
@@ -68,7 +67,7 @@ int main(void){
 
 
 	//Defino el manejador de la señal
-	signal(SIGUSR1, chldKilled);
+	signal(SIGCHLD, chldKilled);
 
 	//Creo la lista
 	hijos = list_create();
